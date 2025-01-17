@@ -1,0 +1,44 @@
+# Gradle
+.gradle/
+bin/
+libs/
+
+# Build
+build/
+target/
+
+# IntelliJ IDEA
+.idea/
+out/
+
+# Eclipse
+.project
+.classpath
+.settings
+
+# NetBeans
+nbproject/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+
+# Config
+config.gradle
+
+# Windows
+$RECYCLE.BIN/
+*.stackdump
+[Dd]esktop.ini
+*.lnk
+Thumbs.db
+Thumbs.db:encryptable
+
+# Mac OS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Ignore
+*.tmp
+*.ignore
