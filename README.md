@@ -13,6 +13,10 @@ Ve své hře budeš mít možnost prozkoumávat různé místnosti, bojovat s ne
 # Ukládání práce
 
 Vytvoř si v tomto repozitáři svou vlastní branch s názvem `dev/github_jmeno` _(např. dev/robacz)_ a veškerou svou práci do ní pushuj.
+Nezapomeň pravidelně kontrolovat změny udělané v `master` branche a případně si je pullovat do své branche.
+
+> [!CAUTION]
+> V žádném případě nepushujte žádnou svou práci do `master` branche, ani nevytvářejte pull requesty.
 
 ---
 
