@@ -20,7 +20,7 @@ public class CommandLineUI {
 
         try (Scanner scanner = new Scanner(System.in)) {
             System.out.println(this.game.getWelcomeMessage());
-            while (this.game.isFinished()) {
+            while (!this.game.isFinished()) {
                 System.out.print("> ");
                 System.out.println(this.game.processTextCommand(scanner.nextLine()));
             }
