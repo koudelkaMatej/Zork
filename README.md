@@ -108,7 +108,7 @@ Tvá fantazie zde nemá žádné hranice!
 
 ## 9. Logování
 
-Použij _(již přidanou)_ knihovnu **Log4j** pro logování a zapisuj všechny použité příkazy s jejich časem použití do souboru `prikazy.log`.
+Použij _(již přidanou)_ knihovnu **Slf4j** pro logování a zapisuj všechny použité příkazy s jejich časem použití do souboru `prikazy.log`.
 
 > [!IMPORTANT]
 > Zajisti (pomocí logovací knihovny), aby se vývojářské informace neukazovali při hraní hráčům v konzoli.
