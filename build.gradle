@@ -33,4 +33,8 @@ tasks.named('shadowJar', ShadowJar) {
     manifest { attributes 'Main-Class': 'cz.spskladno.zork.main.Main' }
 }
 
+compileJava {
+    options.encoding = 'UTF-8'
+}
+
 clean { delete 'target' }
