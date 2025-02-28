@@ -1,5 +1,7 @@
 package cz.spskladno.zork.game;
 
+import cz.spskladno.zork.game.Heroes.Hero;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +14,7 @@ public class GameDataImpl implements GameData {
     private Room currentRoom;
     private boolean finished;
     private List<Room> rooms;
+    private Hero hero = new Hero("Honza", 100, 10, 20, 5);
 
     /**
      * Room map registration in constructor
@@ -22,10 +25,9 @@ public class GameDataImpl implements GameData {
 
     public void init() {
         this.rooms = new ArrayList<>();
-        Room baseRoom = new RoomImpl("Jeskyne", "temna jeskyne plna nepratel");
+        Room baseRoom = new RoomImpl("Vstup do jeskyne", "Jsi u vstupu do jeskyne. Vevnitř je jen tma a nebo ne?");
         baseRoom.registerExit(baseRoom);
         rooms.add(baseRoom);
-
         this.currentRoom = baseRoom;
     }
 

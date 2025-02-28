@@ -1,9 +1,8 @@
 package cz.spskladno.zork.game;
 
-import cz.spskladno.zork.command.Command;
-import cz.spskladno.zork.command.GoCommand;
-import cz.spskladno.zork.command.HelpCommand;
-import cz.spskladno.zork.command.ResetCommand;
+import cz.spskladno.zork.command.*;
+import cz.spskladno.zork.game.Heroes.Hero;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,6 +29,8 @@ public class GameImpl implements Game {
         Command help = new HelpCommand(commands);
         Command reset = new ResetCommand();
         GoCommand go = new GoCommand();
+        StatsCommand stats = new StatsCommand();
+        commands.put(stats.getName(), stats);
         commands.put(help.getName(), help);
         commands.put(reset.getName(), reset);
         commands.put(go.getName(), go);

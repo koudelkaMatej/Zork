@@ -13,13 +13,12 @@ public class CommandLineUI {
     private static final Logger log = LoggerFactory.getLogger(CommandLineUI.class);
     private static CommandLineUI INSTANCE = new CommandLineUI();
     private Game game = new GameImpl();
-
+    public static Hero hero = new Hero("Honza", 100, 10, 20, 5);
     public CommandLineUI() {
     }
 
     public void start() {
         log.info("Application started.");
-        Hero hero = new Hero("Honza", 100, 10, 20, 5);
 
         try (Scanner scanner = new Scanner(System.in)) {
             System.out.println(this.game.getWelcomeMessage());
