@@ -30,6 +30,8 @@ public class GameImpl implements Game {
         Command reset = new ResetCommand();
         GoCommand go = new GoCommand();
         StatsCommand stats = new StatsCommand();
+        MapCommand map = new MapCommand();
+        commands.put(map.getName(), map);
         commands.put(stats.getName(), stats);
         commands.put(help.getName(), help);
         commands.put(reset.getName(), reset);
