@@ -28,11 +28,11 @@ public class GameDataImpl implements GameData {
      */
     public GameDataImpl() {
         this.init();
-        resetHero();
     }
 
     public void init() {
         this.CreateUniverse();
+        resetHero();
     }
 
     public void CreateUniverse(){
@@ -169,7 +169,7 @@ public class GameDataImpl implements GameData {
     }
 
     public void resetHero(){
-        hero.restart();
+        hero.getInventory().clear();
     }
 
 

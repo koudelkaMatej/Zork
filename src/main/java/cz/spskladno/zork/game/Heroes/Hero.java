@@ -25,7 +25,7 @@ public class Hero implements Heroes {
     @Setter
     private int experienceToNextLevel;
     private int criticalChance;
-    private Inventory inventory;
+    private Inventory inventory = new Inventory(10);
     private int strength;
 
     public Hero() {
@@ -44,7 +44,7 @@ public class Hero implements Heroes {
         this.experienceToNextLevel = 10;
         this.criticalChance = 0;
         this.strength = 20;
-        this.inventory = new Inventory(this.strength);
+        this.inventory.clear();
 
 
     }
@@ -107,7 +107,7 @@ public class Hero implements Heroes {
     public String toString() {
         return itemColor + "Staty hrdiny " + name + "\n" +
                 levelANSI + " " + level + "\t"+ experienceANSI + " " + experience + "/" + experienceToNextLevel + "\t\t"+ heartANSI + " " + HP + "\n" +
-                defenseANSI + " " + defense + "\t"+  utokANSI + " " + minAttack + "-" + maxAttack + "\t"+ criticalANSI  + " " + criticalChance + "\n" +
+                defenseANSI + " " + defense + "\t"+  utokANSI + " " + minAttack + "-" + maxAttack + "\t\t"+ criticalANSI  + " " + criticalChance + " %\n" +
         backpackANSI + ": " + inventory.getItemsName()+ "\n" + reset;
     }
 
@@ -172,7 +172,7 @@ public class Hero implements Heroes {
 //
     @Override
     public void heal(Item item) {
-        if (inventory.getItems().contains(item)) {
+        if (inventory.getItems().containsValue(item)){
             if (item.getItemFlyweight().getItemType().equals(potionANSI)) {
                 this.raiseHP(item.getHp());
                 System.out.println("Lektvar ti přidal " + item.getHp() + " životů.");

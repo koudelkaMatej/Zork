@@ -1,54 +1,57 @@
 package cz.spskladno.zork.game.Items;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Inventory {
-    private final ArrayList<Item> items;
+    private final Map<String, Item> itemsMap;  // Changed from ArrayList to HashMap
     private final int maxSize;
     private int size;
 
     public Inventory(int maxSize) {
         this.maxSize = maxSize;
         this.size = 0;
-        this.items = new ArrayList<>();
+        this.itemsMap = new HashMap<>();  // Initializing the map
     }
 
     public void addItem(Item item) {
-        if ((size+item.getWeight()) < maxSize) {
-            items.add(item);
-            size+=item.getWeight();
+        if ((size + item.getWeight()) <= maxSize) {
+            itemsMap.put(item.getItemFlyweight().getName(), item);  // Using item name as the key
+            size += item.getWeight();
             System.out.println("Předmět " + item.getItemFlyweight().getName() + " byl přidán do inventáře.");
+        } else {
+            System.out.println("Inventář je plný nebo předmět je příliš těžký.");
         }
     }
 
     public void removeItem(Item item) {
-        if (items.contains(item)){
+        if (itemsMap.containsKey(item.getItemFlyweight().getName())) {
             System.out.println("Předmět " + item.getItemFlyweight().getName() + " byl odebrán z inventáře.");
-            items.remove(item);
-            size-=item.getWeight();
-        }
-        else{
+            itemsMap.remove(item.getItemFlyweight().getName());
+            size -= item.getWeight();
+        } else {
             System.out.println("Předmět " + item.getItemFlyweight().getName() + " není v inventáři.");
         }
     }
-    public ArrayList<Item> getItems() {
-        return items;
+
+    public Map<String, Item> getItems() {
+        return itemsMap;  // Returns the map of items
     }
+
     public String getItemsName() {
         StringBuilder sb = new StringBuilder();
-        for (Item item : items) {
+        for (Item item : itemsMap.values()) {
             sb.append(item.getItemFlyweight().getItemType()).append(item.getItemFlyweight().getName()).append(", ");
         }
         return sb.toString();
     }
 
     public Item getItemByName(String name) {
-        for (Item item : items) {
-            if (item.getItemFlyweight().getName().equals(name)) {
-                return item;
-            }
-        }
-        return null;
+        return itemsMap.get(name);  // Direct lookup in the map
     }
 
+    public void clear() {
+        itemsMap.clear();  // This clears the map
+        size = 0;  // Make sure the size is also reset to 0
+    }
 }
