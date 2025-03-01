@@ -1,4 +1,6 @@
 package cz.spskladno.zork.game;
+import cz.spskladno.zork.game.Items.Item;
+import static cz.spskladno.zork.game.AnsiChars.*;
 
 import java.util.*;
 
@@ -10,6 +12,8 @@ public class RoomImpl implements Room {
     private String name;
     private String description;
     private Map<String, Room> exits = new HashMap<>();
+    private List<Item> items = new ArrayList<>();
+    private boolean isLocked = false;
 
 
     public RoomImpl(String name, String description) {
@@ -17,6 +21,17 @@ public class RoomImpl implements Room {
         this.description = description;
     }
 
+    public RoomImpl(String name, String description, Item item) {
+        this.name = name;
+        this.description = description;
+        this.items.add(item);
+    }
+    public RoomImpl(String name, String description, Item item, boolean isLocked) {
+        this.name = name;
+        this.description = description;
+        this.items.add(item);
+        this.isLocked = isLocked;
+    }
     /**
      * Adds a new exit to the map
      */
@@ -36,7 +51,7 @@ public class RoomImpl implements Room {
      */
     @Override
     public String getDescriptionWithExits() {
-        return "Vychody: " + String.join(", ", this.exits.keySet());
+        return "Vychody: "+ roomColor + String.join(", ", this.exits.keySet()) + resetColor;
     }
 
     /**
@@ -63,6 +78,16 @@ public class RoomImpl implements Room {
         return exits.getOrDefault(name, null);
     }
 
+    public String getExitsName() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(roomNameColor);
+        for (Room room : exits.values()) {
+            sb.append(room.getName()).append(", ");
+        }
+        sb.append(resetColor);
+        return sb.toString();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -71,8 +96,71 @@ public class RoomImpl implements Room {
         return Objects.equals(name, room.name);
     }
 
+    public String getItemsName() {
+        StringBuilder sb = new StringBuilder();
+        for (Item item : items) {
+            sb.append(item.getItemFlyweight().getItemType()).append(item.getItemFlyweight().getName()).append(", ");
+        }
+        return sb.toString();
+    }
+
+    @Override
+    public boolean isLocked() {
+        return isLocked;
+    }
+
+    public void setLocked(boolean locked) {
+        isLocked = locked;
+    }
+
+    public Item getItemByName(String name) {
+        for (Item item : items) {
+            if (item.getItemFlyweight().getName().equals(name)) {
+                return item;
+            }
+        }
+        return null;
+    }
+
+    public void removeItem(String itemName) {
+        items.removeIf(item -> item.getItemFlyweight().getName().equals(itemName));
+    }
+
+    public void addItem(Item item) {
+        items.add(item);
+    }
+    public Item getItem(String itemName) {
+        for (Item item : items) {
+            if (item.getItemFlyweight().getName().equals(itemName)) {
+                return item;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("\nNacházíš se v místnosti: ")
+                .append(roomNameColor).append(getName()).append(resetColor).append("\n")
+                .append(descriptionColor).append(getDescription()).append(resetColor).append("\n");
+
+        if (getItemsName() != null && !getItemsName().isEmpty()) {
+            sb.append("V místnosti se nachází: ")
+                    .append(itemColor).append(getItemsName()).append(resetColor).append("\n");
+        }
+
+        sb.append(descriptionColor).append(getDescriptionWithExits()).append(resetColor);
+
+        return sb.toString();
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(name);
     }
+
 }
+
+

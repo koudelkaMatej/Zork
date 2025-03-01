@@ -31,6 +31,14 @@ public class GameImpl implements Game {
         GoCommand go = new GoCommand();
         StatsCommand stats = new StatsCommand();
         MapCommand map = new MapCommand();
+        EndCommand end = new EndCommand();
+        ExploreRoomCommand exploreRoom = new ExploreRoomCommand();
+        PickUpCommand pickUp = new PickUpCommand();
+        DropCommand drop = new DropCommand();
+        commands.put(drop.getName(), drop);
+        commands.put(pickUp.getName(), pickUp);
+        commands.put(exploreRoom.getName(), exploreRoom);
+        commands.put(end.getName(), end);
         commands.put(map.getName(), map);
         commands.put(stats.getName(), stats);
         commands.put(help.getName(), help);
@@ -55,7 +63,7 @@ public class GameImpl implements Game {
                 reset + "\n" +
                 bold + whiteColor+ "Věděl jsi, že právě teď začíná tvé největší dobrodružství!" + reset + "\n" +
                 "\n" +
-                "Tvá hra začíná v: " + roomColor + gameData.getCurrentRoom().getName() + " " +  descriptionColor + gameData.getCurrentRoom().getDescription() + reset;
+                bold + "Tvá hra začíná:" + reset + gameData.getCurrentRoom().toString();
     }
 
 
@@ -99,7 +107,7 @@ public class GameImpl implements Game {
         String[] args = line.split(" ");
         Command command = commands.getOrDefault(args[0], null);
         if (command != null) {
-            result = command.execute(null, gameData);
+            result = command.execute(args, gameData);
         } else {
             result = "Neznamy prikaz, zkus jiny nebo pouzij prikaz 'napoveda'";
         }

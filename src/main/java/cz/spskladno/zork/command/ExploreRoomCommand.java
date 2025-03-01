@@ -1,12 +1,13 @@
 package cz.spskladno.zork.command;
 
 import cz.spskladno.zork.game.GameData;
-import cz.spskladno.zork.game.Room;
-public class StatsCommand implements Command{
+import static cz.spskladno.zork.game.AnsiChars.*;
+public class ExploreRoomCommand implements Command{
     public String getName() {
-        return "staty";
+        return "prozkoumej";
     }
     public String execute(String[] arguments, GameData gameData) {
-        return gameData.getHero().toString();
+        return gameData.getCurrentRoom().toString();
+
     }
 }

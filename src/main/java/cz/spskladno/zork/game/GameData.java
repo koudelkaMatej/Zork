@@ -1,5 +1,8 @@
 package cz.spskladno.zork.game;
 
+import cz.spskladno.zork.game.Heroes.Hero;
+import cz.spskladno.zork.game.Items.Item;
+
 import java.util.List;
 
 public interface GameData {
@@ -14,4 +17,6 @@ public interface GameData {
     void setCurrentRoom(Room currentRoom);
 
     void init();
+
+    Hero getHero();
 }
