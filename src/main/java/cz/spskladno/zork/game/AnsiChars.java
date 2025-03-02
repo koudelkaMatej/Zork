@@ -36,4 +36,5 @@ public class AnsiChars {
     public static String weightANSI = "\uD83D\uDCAA"; //
     public static String helmetANSI = "\uD83E\uDE96"; // 🪖
     public static String legsANSI = "\uD83D\uDC56"; // 👖
+    public static String lootANSI = "\uD83D\uDCB0"; // 🏆💰🎁
 }

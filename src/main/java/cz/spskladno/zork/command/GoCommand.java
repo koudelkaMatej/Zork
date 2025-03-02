@@ -22,6 +22,12 @@ public class GoCommand implements Command {
         if (exitByName.isLocked()) {
             return "Vychod je zamcen. Najdi klíč";
         }
+        if (gameData.getCurrentRoom().getEnemy() != null) {
+            gameData.getCurrentRoom().getEnemy().attack(gameData.getHero());
+            gameData.setCurrentRoom(exitByName);
+            return "Utekl jsi!\n"+ gameData.getCurrentRoom().toString();
+
+        }
         gameData.setCurrentRoom(exitByName);
         return gameData.getCurrentRoom().toString();
     }

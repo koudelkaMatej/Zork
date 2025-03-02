@@ -1,4 +1,5 @@
 package cz.spskladno.zork.game;
+import cz.spskladno.zork.game.Enemies.Enemy;
 import cz.spskladno.zork.game.Items.Item;
 import static cz.spskladno.zork.game.AnsiChars.*;
 
@@ -13,8 +14,17 @@ public class RoomImpl implements Room {
     private String description;
     private Map<String, Room> exits = new HashMap<>();
     private List<Item> items = new ArrayList<>();
+    private List<Enemy> enemies = new ArrayList<>();
     private boolean isLocked = false;
+    private static final Random RANDOM = new Random();
 
+    public List<Item> getItems() {
+        return items;
+    }
+
+    public List<Enemy> getEnemies() {
+        return enemies;
+    }
 
     public RoomImpl(String name, String description) {
         this.name = name;
@@ -26,12 +36,52 @@ public class RoomImpl implements Room {
         this.description = description;
         this.items.add(item);
     }
-    public RoomImpl(String name, String description, Item item, boolean isLocked) {
+
+    public RoomImpl(String name, String description, ArrayList itemsList, ArrayList enemiesList , boolean isLocked) {
         this.name = name;
         this.description = description;
-        this.items.add(item);
         this.isLocked = isLocked;
+        int randomNumber = 0;
+        int randomIndex = 0;
+        if (itemsList == null ||itemsList.isEmpty()) {
+            this.items = new ArrayList<>();
+        }
+        else{
+            randomNumber = RANDOM.nextInt(25) + 1;
+            randomIndex = RANDOM.nextInt(itemsList.size());
+            if (randomNumber < 25) {
+                addItem((Item) itemsList.get(randomIndex));
+                itemsList.remove(randomIndex);
+            } else {
+                this.items = new ArrayList<>();
+            }
+        }
+
+        if (enemiesList == null || enemiesList.isEmpty() ) {
+            this.enemies = new ArrayList<>();
+        }
+        else {
+            randomNumber = RANDOM.nextInt(25) + 1;
+            randomIndex = RANDOM.nextInt(enemiesList.size());
+            if (randomNumber < 25) {
+                addEnemy((Enemy) enemiesList.get(randomIndex));
+                enemiesList.remove(randomIndex);
+            } else {
+                this.enemies = new ArrayList<>();
+            }
+        }
     }
+
+    public void addEnemy(Enemy enemy){
+        enemies.add(enemy);
+    }
+
+    @Override
+    public void setDescription(String s) {
+        this.description = s;
+    }
+
+
     /**
      * Adds a new exit to the map
      */
@@ -51,7 +101,7 @@ public class RoomImpl implements Room {
      */
     @Override
     public String getDescriptionWithExits() {
-        return "Vychody: "+ roomColor + String.join(", ", this.exits.keySet()) + resetColor;
+        return "Můžeš se vydat do: "+ roomColor + String.join(", ", this.exits.keySet()) + resetColor;
     }
 
     /**
@@ -59,7 +109,17 @@ public class RoomImpl implements Room {
      */
     @Override
     public String getDescription() {
-        return description;
+        if (description == null) {
+            return "Nemáš žádný popis.";
+        }
+        if (getEnemies().isEmpty()){
+            return description;
+        }
+        else{
+            StringBuilder sb = new StringBuilder();
+            sb.append(description).append("\n");
+            return sb.toString();
+        }
     }
 
     /**
@@ -70,6 +130,9 @@ public class RoomImpl implements Room {
         return Collections.unmodifiableCollection(exits.values());
     }
 
+    public Enemy getEnemy(){
+        return enemies.get(0);
+    }
     /**
      * Returns a room based on the entered room (exit) name
      */
@@ -138,6 +201,7 @@ public class RoomImpl implements Room {
         return null;
     }
 
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -147,11 +211,13 @@ public class RoomImpl implements Room {
                 .append(descriptionColor).append(getDescription()).append(resetColor).append("\n");
 
         if (getItemsName() != null && !getItemsName().isEmpty()) {
-            sb.append("V místnosti se nachází: ")
-                    .append(itemColor).append(getItemsName()).append(resetColor).append("\n");
+            sb.append("Ve tvém okolí se nachází: ").append(itemColor).append(getItemsName()).append(resetColor).append("\n");
+        }
+        if (getEnemy().isAlive() && getEnemy() != null) {
+            sb.append("V místnosti se nachází nepřítel: ").append(enemyColor).append(getEnemy().getName()).append(resetColor).append("\n");
         }
 
-        sb.append(descriptionColor).append(getDescriptionWithExits()).append(resetColor);
+        sb.append(getDescriptionWithExits());
 
         return sb.toString();
     }

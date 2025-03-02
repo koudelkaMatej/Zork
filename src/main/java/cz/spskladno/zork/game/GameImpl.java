@@ -1,7 +1,7 @@
 package cz.spskladno.zork.game;
 
 import cz.spskladno.zork.command.*;
-import cz.spskladno.zork.game.Heroes.Hero;
+import cz.spskladno.zork.game.Enemies.Enemy;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -53,17 +53,17 @@ public class GameImpl implements Game {
     public String getWelcomeMessage() {
 
         return reportColor + bold + "Vítej ve hře Zork!" + reset + "\n" +
-                "\n" +
+                "\n" + italic+
                 "V mlhavém úsvitu, kdy slunce sotva líbalo vrcholky hor, se před branami královského hradu objevil posel v královských barvách. Zadýchaný a rozrušený předal vzkaz – samotný král tě žádá o okamžitou audienci.\n" +
-                "Vstoupil jsi do velkého sálu, kde na trůnu seděl stárnoucí, ale stále důstojný král " + friendColor + "Aldemar" + resetColor + ". Jeho oči byly plné zoufalství. Když jsi poklekl, pronesl:\n" +
+                "Vstoupil jsi do velkého sálu, kde na trůnu seděl stárnoucí, ale stále důstojný král " + friendColor + "Aldemar" + italic + ". Jeho oči byly plné zoufalství. Když jsi poklekl, pronesl:\n" +
                 "\n" +
                 italic + "Statečný hrdino, přišla hodina největší zkoušky.\n" +
                 "Moje dcera, " + friendColor + " princezna Elara " + resetColor + italic + ", byla unesena strašlivým " + enemyColor + " Vorthraxem" + resetColor + italic +". Odnesl ji do svého doupěte v Hlubokých horách, odkud se dosud nikdo nevrátil živý. Moji rytíři se bojí, má armáda je bezradná," +
                 "\nale ty, ty jsi jiný. Tvá sláva se rozšířila daleko a široko. Jsi poslední nadějí mého království." + enemyColor + " Vorthrax " + reset + italic + "musí zemřít a princezna se musí vrátit. Nevrátíš-li se, bude to má věčná hanba.\n" +
                 reset + "\n" +
-                bold + whiteColor+ "Věděl jsi, že právě teď začíná tvé největší dobrodružství!" + reset + "\n" +
+                bold + italic+ "Věděl jsi, že právě teď začíná tvé největší dobrodružství!" + reset + "\n" +
                 "\n" +
-                bold + "Tvá hra začíná:" + reset + gameData.getCurrentRoom().toString();
+                reset + bold + "Tvá hra začíná:" + reset + gameData.getCurrentRoom().toString();
     }
 
 
@@ -85,20 +85,19 @@ public class GameImpl implements Game {
                 reset;
     }
 
-    /*
+
     @Override
-    public String deathEndMessage(Enemy enemy) {
+    public String deathEndMessage() {
         return reportColor + bold + "Konec hry!" + reset + "\n" +
-                "\n" +
-                "Bohužel, tvé dobrodružství skončilo. Byl jsi poražen " + enemyColor + enemy.getName() + reset + ".\n" +
-                "Princezna " + friendColor + "Elara" + reset + " byla opuštěna v temných horách, bez tebe není nikdo, kdo by ji zachránil.\n" +
-                "\n" +
+                "\n" + italic+
+                "Bohužel, tvé dobrodružství skončilo. Zabil tě " + enemyColor + this.gameData.getCurrentRoom().getEnemy().getName() + italic + ".\n" +
+                "Princezna " + friendColor + "Elara" + italic + " byla opuštěna v temných horách, bez tebe není nikdo, kdo by ji zachránil.\n" +
                 "Tvá smrt se stala varováním pro ostatní. Tvé jméno bude vzpomínáno v příbězích o odvážných, kteří selhali.\n" +
                 "\n" +
-                "Zemřel jsi, ale tvá legenda bude žít dál jako varování pro všechny budoucí hrdiny.\n" +
+                "Tvá legenda bude žít dál jako varování pro všechny budoucí hrdiny.\n" +
                 reset;
     }
-    */
+
 
     @Override
     public String processTextCommand(String line) {
@@ -114,6 +113,11 @@ public class GameImpl implements Game {
         return result;
     }
 
+    @Override
+    public String settingUpHero() {
+        return  reportColor +"Zvol si jméno hrdiny: " + reset;
+    }
+
     /**
      * Delegates its call to the mutable GameData instance, which holds the current game state. This
      * state should be checked after each command evaluation a possibly terminate the whole app if
@@ -121,6 +125,18 @@ public class GameImpl implements Game {
      */
     @Override
     public boolean isFinished() {
+        if (gameData.getHero().isAlive()) {
+            this.gameData.setFinished(false);
+        }
         return gameData.isFinished();
     }
+
+    public boolean heroIsAlive() {
+        return gameData.getHero().isAlive();
+    }
+
+    public void setName(String name) {
+        gameData.getHero().setName(name);
+    }
+
 }

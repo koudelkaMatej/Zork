@@ -7,7 +7,6 @@ import lombok.Setter;
 import static cz.spskladno.zork.game.AnsiChars.*;
 
 public class Hero implements Heroes {
-    @Setter
     private String name;
     private int maxHP;
     @Setter
@@ -25,7 +24,8 @@ public class Hero implements Heroes {
     @Setter
     private int experienceToNextLevel;
     private int criticalChance;
-    private Inventory inventory = new Inventory(10);
+    private final Inventory inventory = new Inventory(10);
+    @Setter
     private int strength;
 
     public Hero() {
@@ -65,12 +65,6 @@ public class Hero implements Heroes {
         return strength;
     }
 
-    public void setStrength(int strength) {
-        this.strength = strength;
-    }
-
-
-
     public int getHP() {
         return HP;
     }
@@ -106,7 +100,7 @@ public class Hero implements Heroes {
     @Override
     public String toString() {
         return itemColor + "Staty hrdiny " + name + "\n" +
-                levelANSI + " " + level + "\t"+ experienceANSI + " " + experience + "/" + experienceToNextLevel + "\t\t"+ heartANSI + " " + HP + "\n" +
+                levelANSI + " " + level + "\t"+ experienceANSI + " " + experience + "/" + experienceToNextLevel + "\t\t"+ heartANSI + " " + HP +"/" + maxHP + "\n" +
                 defenseANSI + " " + defense + "\t"+  utokANSI + " " + minAttack + "-" + maxAttack + "\t\t"+ criticalANSI  + " " + criticalChance + " %\n" +
         backpackANSI + ": " + inventory.getItemsName()+ "\n" + reset;
     }
@@ -175,8 +169,8 @@ public class Hero implements Heroes {
         if (inventory.getItems().containsValue(item)){
             if (item.getItemFlyweight().getItemType().equals(potionANSI)) {
                 this.raiseHP(item.getHp());
-                System.out.println("Lektvar ti přidal " + item.getHp() + " životů.");
-                System.out.println("Tvůje životy jsou nyní: " + HP);
+                System.out.println("Lektvar ti přidal " + itemColor + item.getHp() +resetColor +  " životů.");
+                System.out.println("Tvoje životy jsou nyní: " + itemColor +HP + "/" + maxHP+ resetColor );
                 inventory.removeItem(item);
             }
             else{
@@ -189,4 +183,16 @@ public class Hero implements Heroes {
 
     }
 
+
+    public boolean setName(String name) {
+        if (name.length() > 3) {
+            this.name = name;
+            return true;
+        }
+        return false;
+    }
+
+    public int getHp() {
+        return HP;
+    }
 }

@@ -18,11 +18,20 @@ public class PickUpCommand implements Command {
         if (item == null) {
             return "Tento predmet tu neni.";
         }
-        gameData.getHero().addToInventory(item);
-        gameData.getCurrentRoom().removeItem(itemName);
+        if (gameData.getCurrentRoom().getEnemy() != null) {
+            System.out.println("Snažil jsi se sebrat předmět, ale než se ti to podařilo, tak tě nepřítel zranil.");
+            gameData.getCurrentRoom().getEnemy().attack(gameData.getHero());
+        }
+        else {
+            gameData.getHero().addToInventory(item);
+            gameData.getCurrentRoom().removeItem(itemName);
+        }
+        if (!gameData.getHero().isAlive()){
+            gameData.setFinished(true);
+        }
 
 
-        return gameData.getCurrentRoom().toString();
+        return "";
     }
 }
 

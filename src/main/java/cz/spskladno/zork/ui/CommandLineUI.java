@@ -17,14 +17,21 @@ public class CommandLineUI {
 
     public void start() {
         log.info("Application started.");
-
         try (Scanner scanner = new Scanner(System.in)) {
+            System.out.printf(this.game.settingUpHero());
+            this.game.setName(scanner.nextLine());
+            System.out.println("\n\n");
             System.out.println(this.game.getWelcomeMessage());
             while (!this.game.isFinished()) {
                 System.out.print("> ");
                 System.out.println(this.game.processTextCommand(scanner.nextLine()));
             }
+            if (!this.game.heroIsAlive()) {
+                System.out.println(this.game.deathEndMessage());
+            }
+            else {
                 System.out.println(this.game.getEndMessage());
+            }
         }
     }
 

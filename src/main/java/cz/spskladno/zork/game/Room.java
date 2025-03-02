@@ -1,5 +1,6 @@
 package cz.spskladno.zork.game;
 
+import cz.spskladno.zork.game.Enemies.Enemy;
 import cz.spskladno.zork.game.Items.Item;
 
 import java.util.Collection;
@@ -29,4 +30,10 @@ public interface Room {
     Object getItem(String itemName);
 
     void addItem(Item item);
+
+    Enemy getEnemy();
+
+    void addEnemy(Enemy enemy);
+
+    void setDescription(String s);
 }
