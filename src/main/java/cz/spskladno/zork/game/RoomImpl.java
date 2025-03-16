@@ -5,7 +5,7 @@ import cz.spskladno.zork.game.Items.Item;
 
 import java.util.*;
 
-import cz.spskladno.zork.game.heroes.Hero;
+import cz.spskladno.zork.game.Heroes.Hero;
 import lombok.Getter;
 import lombok.Setter;
 import static cz.spskladno.zork.game.AnsiChars.*;

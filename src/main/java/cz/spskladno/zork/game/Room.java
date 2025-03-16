@@ -2,7 +2,7 @@ package cz.spskladno.zork.game;
 
 import cz.spskladno.zork.game.Items.Item;
 import cz.spskladno.zork.game.Enemies.Enemy;
-import cz.spskladno.zork.game.heroes.Hero;
+import cz.spskladno.zork.game.Heroes.Hero;
 
 import java.util.Collection;
 import java.util.List;

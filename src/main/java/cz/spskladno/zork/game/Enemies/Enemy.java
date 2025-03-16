@@ -1,10 +1,9 @@
 package cz.spskladno.zork.game.Enemies;
 
 import cz.spskladno.zork.game.Items.Item;
-import cz.spskladno.zork.game.heroes.Hero;
+import cz.spskladno.zork.game.Heroes.Hero;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 import lombok.Getter;
 import lombok.Setter;

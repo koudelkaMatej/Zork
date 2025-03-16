@@ -1,4 +1,4 @@
-package cz.spskladno.zork.game.heroes;
+package cz.spskladno.zork.game.Heroes;
 import cz.spskladno.zork.game.Enemies.Enemy;
 import cz.spskladno.zork.game.Items.Equipment;
 import cz.spskladno.zork.game.Items.Inventory;

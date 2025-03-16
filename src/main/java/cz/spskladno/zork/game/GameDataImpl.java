@@ -8,7 +8,7 @@ import cz.spskladno.zork.game.Items.Item;
 import cz.spskladno.zork.game.Items.ItemBuilder;
 import cz.spskladno.zork.game.Items.ItemFlyweight;
 import cz.spskladno.zork.game.Items.ItemTypes;
-import cz.spskladno.zork.game.heroes.Hero;
+import cz.spskladno.zork.game.Heroes.Hero;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -1,6 +1,6 @@
 package cz.spskladno.zork.game;
 
-import cz.spskladno.zork.game.heroes.Hero;
+import cz.spskladno.zork.game.Heroes.Hero;
 
 import java.util.List;
 
