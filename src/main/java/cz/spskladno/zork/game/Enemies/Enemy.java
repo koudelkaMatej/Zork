@@ -1,56 +1,49 @@
 package cz.spskladno.zork.game.Enemies;
 
-import cz.spskladno.zork.game.Heroes.Hero;
 import cz.spskladno.zork.game.Items.Item;
+import cz.spskladno.zork.game.heroes.Hero;
 
+import java.util.ArrayList;
+import java.util.Objects;
+
+import lombok.Getter;
+import lombok.Setter;
 import static cz.spskladno.zork.game.AnsiChars.*;
 
-public class Enemy {
 
+@Getter @Setter
+public class Enemy {
+    private int health;
+    private int maxHealth;//
+    private int minAttack;
+    private int maxAttack;//
+    private int defense;//
+    private int criticalChance; //
+    private int experience;
+    private int speed;
+    private int level; //
+    private boolean alive = true;
+    private ArrayList<Item> loot = new ArrayList<>();
     private EnemyFlyweight enemyFlyweight;
     private EnemyBuilder enemyBuilder;
     private String name;
-    private int hp;
-    private int minAttack;
-    private int maxAttack;
-    private int defense;
-    private int criticalChance;
-    private int experience;
-    private boolean alive = true;
-    private Item loot  ;
+
 
     public Enemy(EnemyBuilder enemyBuilder) {
        this.enemyBuilder = enemyBuilder;
         this.enemyFlyweight = enemyBuilder.getEnemyFlyweight();
         this.name = enemyBuilder.getName();
-        this.hp = enemyBuilder.getHp();
+        this.health = enemyBuilder.getHealth();
         this.defense = enemyBuilder.getDefense();
         this.criticalChance = enemyBuilder.getCriticalChance();
-        this.experience = enemyBuilder.getExperience();
         this.minAttack = enemyBuilder.getMinAttack();
         this.maxAttack = enemyBuilder.getMaxAttack();
+        this.experience = enemyBuilder.getExperience();
+        this.speed = enemyBuilder.getSpeed();
+        this.level = enemyBuilder.getLevel();
+        this.maxHealth = health;
         this.alive = true;
         this.loot = enemyBuilder.getLoot();
-    }
-
-
-    public void registerItem(Item item){
-        loot = item;
-   }
-   public void unregisterItem(){
-        loot = null;
-    }
-
-    public int getDefense() {
-        return defense;
-    }
-
-    public int getCriticalChance() {
-        return criticalChance;
-    }
-
-    public int getExperience() {
-        return experience;
     }
 
     public void attack(Hero hero){
@@ -64,84 +57,51 @@ public class Enemy {
         if (damage <= 0) {
             damage = 1;
         }
-        hero.setHP(hero.getHp() - damage);
+        hero.setHealth(hero.getHealth() - damage);
         System.out.println(enemyColor +name + resetColor + " útočí na " + friendColor + hero.getName() + resetColor +" a způsobuje " + enemyColor + damage + resetColor+" poškození.");
-        if (hero.getHp() <= 0) {
-            hero.setHP(0);
+        if (hero.getHealth() <= 0) {
+            hero.setHealth(0);
             System.out.println(hero.getName() + " byl poražen.");
 
         }
     }
+    public boolean isAlive(){
+        return health > 0;
+    }
 
     @Override
     public String toString() {
-        return enemyColor + "Staty nepřítele: " + name + "\n" +
-                heartANSI + " " + hp + "\t\t" + experienceANSI + " EXP: " + experience + "\n" +
-                defenseANSI + " " + defense + "\t\t" + utokANSI + " " + minAttack + "-" + maxAttack + "\t\t" +
-                criticalANSI + " " + criticalChance + " %\n" +
-                lootANSI + ": " + (loot != null ? loot.getItemFlyweight().getItemType() + loot.getItemFlyweight().getName() : "Žádný") + "\n" + reset;
+        return  "Staty nepřítele: " + enemyFlyweight.getDifficulty() + name + "\n" +
+                levelANSI + " " + level + " LVL\t" +  healthANSI + " " + health + "/" + maxHealth + "\t\t" + experienceANSI + " " + experience + " EXP"+ "\n" +
+                defenseANSI + " " + defense + "\t\t" + attackANSI + " " + minAttack + "-" + maxAttack + "  \t\t" + criticalChanceANSI + " " + criticalChance + " %\t\t" + speedANSI + " " + speed + "\n" +
+                lootANSI + ": " + (loot != null ? this.getItemsName() : "Žádný") + "\n" + reset;
     }
 
-    public EnemyFlyweight getEnemyFlyweight() {
-        return enemyFlyweight;
+    public String getItemsName(){
+        StringBuilder sb = new StringBuilder();
+        for (Item item : loot) {
+            sb.append(item.getItemFlyweight().getItemType()).append(item.getName()).append(" ");
+        }
+        return sb.toString();
     }
 
-    public void setEnemyFlyweight(EnemyFlyweight enemyFlyweight) {
-        this.enemyFlyweight = enemyFlyweight;
+    public void updateStats(){
+        for (Item item : loot) {
+            if (item != null) {
+                level += item.getLevel();
+                health += item.getHealth();
+                maxHealth += item.getHealth();
+                minAttack += item.getMinAttack();
+                maxAttack += item.getMaxAttack();
+                defense += item.getDefense();
+                criticalChance += item.getCriticalChance();
+                speed += item.getSpeed();
+            }
+        }
     }
 
-    public String getName() {
-        return name;
+    public void equipItem(Item item) {
+        loot.add(item);
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getHp() {
-        return hp;
-    }
-
-    public void setHp(int hp) {
-        this.hp = hp;
-    }
-
-    public int getMinAttack() {
-        return minAttack;
-    }
-
-    public void setMinAttack(int minAttack) {
-        this.minAttack = minAttack;
-    }
-
-    public int getMaxAttack() {
-        return maxAttack;
-    }
-
-    public void setMaxAttack(int maxAttack) {
-        this.maxAttack = maxAttack;
-    }
-
-    public boolean isAlive() {
-        return alive;
-    }
-
-    public void setAlive(boolean alive) {
-        this.alive = alive;
-    }
-
-    public Item getLoot(){
-        return  loot;
-    }
-    public void setLoot(Item loot){
-        this.loot = loot;
-    }
-
-    public EnemyBuilder getEnemyBuilder() {
-        return enemyBuilder;
-    }
-
-    public void setEnemyBuilder(EnemyBuilder enemyBuilder) {
-        this.enemyBuilder = enemyBuilder;
-    }
 }

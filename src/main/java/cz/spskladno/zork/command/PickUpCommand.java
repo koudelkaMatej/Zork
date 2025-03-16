@@ -18,19 +18,17 @@ public class PickUpCommand implements Command {
         if (item == null) {
             return "Tento predmet tu neni.";
         }
-        if (gameData.getCurrentRoom().getEnemy() != null) {
-            System.out.println("Snažil jsi se sebrat předmět, ale než se ti to podařilo, tak tě nepřítel zranil.");
-            gameData.getCurrentRoom().getEnemy().attack(gameData.getHero());
-        }
-        else {
+        if (gameData.getCurrentRoom().getEnemies().isEmpty()) {
             gameData.getHero().addToInventory(item);
-            gameData.getCurrentRoom().removeItem(itemName);
+            gameData.getCurrentRoom().removeItem(item);
+        } else if (!gameData.getCurrentRoom().getEnemies().isEmpty() && gameData.getCurrentRoom().getEnemies().size() > 1) {
+            System.out.println("Snažil jsi se sebrat předmět, ale než se ti to podařilo, tak tě všichni v místnosti zranili.");
+            gameData.getCurrentRoom().allEnemiesAttack(gameData.getHero());
+        } else if (!gameData.getCurrentRoom().getEnemies().isEmpty() && gameData.getCurrentRoom().getEnemies().size() == 1) {
+            System.out.println("Snažil jsi se sebrat předmět, ale než se ti to podařilo, tak tě nepřítel zranil.");
+            gameData.getCurrentRoom().allEnemiesAttack(gameData.getHero());
+            return "";
         }
-        if (!gameData.getHero().isAlive()){
-            gameData.setFinished(true);
-        }
-
-
         return "";
     }
 }

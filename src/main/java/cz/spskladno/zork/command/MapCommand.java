@@ -10,7 +10,6 @@ public class MapCommand implements Command {
 
     @Override
     public String execute(String[] arguments, GameData gameData) {
-        gameData.init();
         return """
                                               _________
                                              /         \\

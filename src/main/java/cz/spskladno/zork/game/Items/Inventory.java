@@ -1,8 +1,9 @@
 package cz.spskladno.zork.game.Items;
 
-import static cz.spskladno.zork.game.AnsiChars.*;
 import java.util.HashMap;
 import java.util.Map;
+
+import static cz.spskladno.zork.game.AnsiChars.*;
 
 public class Inventory {
     private final Map<String, Item> itemsMap;  // Changed from ArrayList to HashMap
@@ -17,21 +18,21 @@ public class Inventory {
 
     public void addItem(Item item) {
         if ((size + item.getWeight()) <= maxSize) {
-            itemsMap.put(item.getItemFlyweight().getName(), item);  // Using item name as the key
+            itemsMap.put(item.getName(), item);  // Using item name as the key
             size += item.getWeight();
-            System.out.println("Předmět " + itemColor + item.getItemFlyweight().getName() + reset +  " byl přidán do inventáře.");
+            System.out.println("Předmět " + itemColor + item.getName() + reset +  " byl přidán do inventáře.");
         } else {
             System.out.println("Inventář je plný nebo předmět je příliš těžký.");
         }
     }
 
     public void removeItem(Item item) {
-        if (itemsMap.containsKey(item.getItemFlyweight().getName())) {
-            System.out.println("Předmět "+ itemColor + item.getItemFlyweight().getName() + resetColor + " byl odebrán z inventáře.");
-            itemsMap.remove(item.getItemFlyweight().getName());
+        if (itemsMap.containsKey(item.getName())) {
+            System.out.println("Předmět "+ itemColor + item.getName() + resetColor + " byl odebrán z inventáře.");
+            itemsMap.remove(item.getName());
             size -= item.getWeight();
         } else {
-            System.out.println("Předmět " + itemColor + item.getItemFlyweight().getName() + resetColor + " není v inventáři.");
+            System.out.println("Předmět " + itemColor + item.getName() + resetColor + " není v inventáři.");
         }
     }
 
@@ -42,7 +43,7 @@ public class Inventory {
     public String getItemsName() {
         StringBuilder sb = new StringBuilder();
         for (Item item : itemsMap.values()) {
-            sb.append(item.getItemFlyweight().getItemType()).append(item.getItemFlyweight().getName()).append(", ");
+            sb.append(item.getItemFlyweight().getItemType()).append(item.getName()).append(" ");
         }
         return sb.toString();
     }
@@ -55,4 +56,5 @@ public class Inventory {
         itemsMap.clear();  // This clears the map
         size = 0;  // Make sure the size is also reset to 0
     }
+
 }

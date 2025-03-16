@@ -1,22 +1,31 @@
 package cz.spskladno.zork.game.Enemies;
 
+import cz.spskladno.zork.game.Items.Equipment;
 import cz.spskladno.zork.game.Items.Item;
-import cz.spskladno.zork.game.Items.ItemBuilder;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter @Setter
 public class EnemyBuilder {
-    private String name;
-    private int hp;
+    private int health;
+    private int maxHealth;//
     private int minAttack;
-    private int maxAttack;
-    private int defense;
-    private int criticalChance;
+    private int maxAttack;//
+    private int defense;//
+    private int criticalChance; //
     private int experience;
-    private boolean alive = true;
-    private Item loot;
+    private int speed;
+    private int level; //
+    private ArrayList<Item> loot = new ArrayList<>();
+
     private EnemyFlyweight enemyFlyweight;
+    private EnemyBuilder enemyBuilder;
+    private String name;
+    private boolean alive = true;
     private static final Random RANDOM = new Random();
 
     public EnemyBuilder (EnemyFlyweight enemyFlyweight, String name) {
@@ -53,19 +62,21 @@ public class EnemyBuilder {
         return this;
     }
 
-    public EnemyBuilder hp(int hp) {
-        this.hp = hp;
+    public EnemyBuilder health(int health) {
+        this.health = health;
         return this;
     }
 
-    public EnemyBuilder loot(ArrayList lootOptions){
+    public EnemyBuilder loot(List<Item> lootOptions){
         if (lootOptions != null && !lootOptions.isEmpty()) {
-            int randomNumber = RANDOM.nextInt(100) + 1;
-            if (randomNumber < 25) {
-                this.loot = null;  // 25% chance of no loot
-            }
-            else {
-                this.loot = (Item) lootOptions.get(RANDOM.nextInt(lootOptions.size()));  // Randomly select an item from the list
+            int chance = 25;
+            while (chance > 0) {
+                int randomNumber = RANDOM.nextInt(100) + 1;
+                if (randomNumber < chance) {
+                    Item lootItem = lootOptions.get(RANDOM.nextInt(lootOptions.size()));
+                    this.loot.add(lootItem); // Randomly select an item from the list
+                }
+                chance -= 10;
             }
         }
         return this;
@@ -73,55 +84,9 @@ public class EnemyBuilder {
 
     public Enemy build()
     {
-        return new Enemy(this);
+        return new Enemy(       this);
+
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public EnemyFlyweight getEnemyFlyweight() {
-        return enemyFlyweight;
-    }
-
-    public int getDefense() {
-        return defense;
-    }
-
-    public int getCriticalChance() {
-        return criticalChance;
-    }
-
-    public int getExperience() {
-        return experience;
-    }
-
-    public int getHp() {
-        return hp;
-    }
-
-    public int getMinAttack() {
-        return minAttack;
-    }
-
-    public int getMaxAttack() {
-        return maxAttack;
-    }
-
-    public boolean isAlive() {
-        return alive;
-    }
-
-    public void setHp(int hp) {
-        this.hp = hp;
-    }
-
-    public void setAlive(boolean alive) {
-        this.alive = alive;
-    }
-
-    public Item getLoot() {
-        return loot;
-    }
 
 }

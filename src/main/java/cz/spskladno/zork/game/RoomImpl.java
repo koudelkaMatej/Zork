@@ -1,90 +1,66 @@
 package cz.spskladno.zork.game;
+
 import cz.spskladno.zork.game.Enemies.Enemy;
 import cz.spskladno.zork.game.Items.Item;
-import static cz.spskladno.zork.game.AnsiChars.*;
 
 import java.util.*;
+
+import cz.spskladno.zork.game.heroes.Hero;
+import lombok.Getter;
+import lombok.Setter;
+import static cz.spskladno.zork.game.AnsiChars.*;
+import static cz.spskladno.zork.game.AnsiChars.resetColor;
+
 
 /**
  * Represents a Room (e.g. space in our game). Contains exits and can form a map of Rooms.
  */
+@Getter @Setter
 public class RoomImpl implements Room {
-
     private String name;
     private String description;
+    private boolean isLocked = false;
     private Map<String, Room> exits = new HashMap<>();
     private List<Item> items = new ArrayList<>();
     private List<Enemy> enemies = new ArrayList<>();
-    private boolean isLocked = false;
     private static final Random RANDOM = new Random();
 
-    public List<Item> getItems() {
-        return items;
-    }
 
-    public List<Enemy> getEnemies() {
-        return enemies;
-    }
 
-    public RoomImpl(String name, String description) {
-        this.name = name;
-        this.description = description;
-    }
 
-    public RoomImpl(String name, String description, Item item) {
-        this.name = name;
-        this.description = description;
-        this.items.add(item);
-    }
 
-    public RoomImpl(String name, String description, ArrayList itemsList, ArrayList enemiesList , boolean isLocked) {
+    public RoomImpl(String name, String description, List<Item> items, List<Enemy> enemies, boolean isLocked) {
         this.name = name;
         this.description = description;
         this.isLocked = isLocked;
-        int randomNumber = 0;
-        int randomIndex = 0;
-        if (itemsList == null ||itemsList.isEmpty()) {
-            this.items = new ArrayList<>();
-        }
-        else{
-            randomNumber = RANDOM.nextInt(25) + 1;
-            randomIndex = RANDOM.nextInt(itemsList.size());
-            if (randomNumber < 25) {
-                addItem((Item) itemsList.get(randomIndex));
-                itemsList.remove(randomIndex);
-            } else {
-                this.items = new ArrayList<>();
-            }
-        }
-
-        if (enemiesList == null || enemiesList.isEmpty() ) {
-            this.enemies = new ArrayList<>();
-        }
-        else {
-            randomNumber = RANDOM.nextInt(25) + 1;
-            randomIndex = RANDOM.nextInt(enemiesList.size());
-            if (randomNumber < 25) {
-                addEnemy((Enemy) enemiesList.get(randomIndex));
-                enemiesList.remove(randomIndex);
-            } else {
-                this.enemies = new ArrayList<>();
-            }
-        }
+        addRandomFromList(items, true);
+        addRandomFromList(enemies, false);
     }
-
-    public void addEnemy(Enemy enemy){
-        enemies.add(enemy);
-    }
-
-    @Override
-    public void setDescription(String s) {
-        this.description = s;
-    }
-
 
     /**
      * Adds a new exit to the map
      */
+
+    private void addRandomFromList(List<?> list, boolean isItems) {
+        if (list == null || list.isEmpty()) {
+            return; // No need to modify the list
+        }
+
+        int randomNumber = RANDOM.nextInt(25) + 1;
+        if (randomNumber < 25) {
+            int randomIndex = RANDOM.nextInt(list.size());
+
+            if (isItems) {
+                addItem((Item) list.get(randomIndex));
+            } else {
+                addEnemy((Enemy) list.get(randomIndex));
+            }
+            list.remove(randomIndex);
+        } else {
+            list.clear();
+        }
+    }
+
     @Override
     public void registerExit(Room room) {
         exits.put(room.getName(), room);
@@ -95,13 +71,41 @@ public class RoomImpl implements Room {
         return name;
     }
 
+    @Override
+    public Item getItemByName(String itemName){
+        for (Item item : items) {
+            if (item.getName().equals(itemName)) {
+                return item;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public Enemy getEnemyByName(String enemyName){
+        for (Enemy enemy : enemies) {
+            if (enemy.getName().equals(enemyName)) {
+                return enemy;
+            }
+        }
+        return null;
+    }
+
+    public void addEnemy(Enemy enemy) {
+        enemies.add(enemy);
+    }
+
+    public void removeEnemy(Enemy enemy) {
+        enemies.remove(enemy);
+    }
+
     /**
      * Method returns a description of this room (from the #getDescription call)
      * and should add possible exit names
      */
     @Override
     public String getDescriptionWithExits() {
-        return "Můžeš se vydat do: "+ roomColor + String.join(", ", this.exits.keySet()) + resetColor;
+        return "Můžeš se vydat do: "+ exitColor + String.join(", ", this.exits.keySet()) + resetColor;
     }
 
     /**
@@ -109,17 +113,7 @@ public class RoomImpl implements Room {
      */
     @Override
     public String getDescription() {
-        if (description == null) {
-            return "Nemáš žádný popis.";
-        }
-        if (getEnemies().isEmpty()){
-            return description;
-        }
-        else{
-            StringBuilder sb = new StringBuilder();
-            sb.append(description).append("\n");
-            return sb.toString();
-        }
+        return description;
     }
 
     /**
@@ -130,11 +124,6 @@ public class RoomImpl implements Room {
         return Collections.unmodifiableCollection(exits.values());
     }
 
-    public Enemy getEnemy(){
-        return enemies.get(0);
-    }
-
-
     /**
      * Returns a room based on the entered room (exit) name
      */
@@ -143,14 +132,13 @@ public class RoomImpl implements Room {
         return exits.getOrDefault(name, null);
     }
 
-    public String getExitsName() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(roomNameColor);
-        for (Room room : exits.values()) {
-            sb.append(room.getName()).append(", ");
-        }
-        sb.append(resetColor);
-        return sb.toString();
+    @Override
+    public void addItem(Item item) {
+        items.add(item);
+    }
+    @Override
+    public void removeItem(Item item) {
+        items.remove(item);
     }
 
     @Override
@@ -161,52 +149,24 @@ public class RoomImpl implements Room {
         return Objects.equals(name, room.name);
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
+    }
+
     public String getItemsName() {
         StringBuilder sb = new StringBuilder();
         for (Item item : items) {
-            sb.append(item.getItemFlyweight().getItemType()).append(item.getItemFlyweight().getName()).append(", ");
+            sb.append(item.getItemFlyweight().getItemType()).append(item.getName()).append(" ");
         }
         return sb.toString();
     }
 
-    @Override
-    public boolean isLocked() {
-        return isLocked;
-    }
-
-    public void setLocked(boolean locked) {
-        isLocked = locked;
-    }
-
-    public Item getItemByName(String name) {
-        for (Item item : items) {
-            if (item.getItemFlyweight().getName().equals(name)) {
-                return item;
-            }
+    public void allEnemiesAttack(Hero hero){
+        for (Enemy enemy : enemies) {
+            enemy.attack(hero);
         }
-        return null;
     }
-
-    public void removeItem(String itemName) {
-        items.removeIf(item -> item.getItemFlyweight().getName().equals(itemName));
-    }
-
-    public void removeEnemy(String enemyName) {
-        enemies.removeIf(enemy -> enemy.getName().equals(enemyName));
-    }
-
-    public void addItem(Item item) {
-        items.add(item);
-    }
-    public Item getItem(String itemName) {
-        for (Item item : items) {
-            if (item.getItemFlyweight().getName().equals(itemName)) {
-                return item;
-            }
-        }
-        return null;
-    }
-
 
     @Override
     public String toString() {
@@ -219,8 +179,15 @@ public class RoomImpl implements Room {
         if (getItemsName() != null && !getItemsName().isEmpty()) {
             sb.append("Ve tvém okolí se nachází: ").append(itemColor).append(getItemsName()).append(resetColor).append("\n");
         }
-        if (getEnemies() != null || !getEnemies().isEmpty()) {
-            sb.append("V místnosti se nachází nepřítel: ").append(enemyColor).append(getEnemy().getName()).append(resetColor).append("\n");
+        if (enemies != null) {
+            if (enemies.isEmpty()) {
+                sb.append("V místnosti se nenachází žádný nepřítel.").append("\n");
+            }
+            else if (enemies.size() == 1) {
+                sb.append("V místnosti se nachází nepřítel: ").append(getEnemiesNameAndDificulty()).append(resetColor).append("\n");
+            } else {
+                sb.append("V místnosti se nachází nepřátelé: ").append(enemyColor).append(getEnemiesNameAndDificulty()).append(resetColor).append("\n");
+            }
         }
 
         sb.append(getDescriptionWithExits());
@@ -228,11 +195,32 @@ public class RoomImpl implements Room {
         return sb.toString();
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(name);
+
+    public String getEnemiesNameAndDificulty() {
+        StringBuilder sb = new StringBuilder();
+        for (Enemy enemy : enemies) {
+            sb.append(enemy.getEnemyFlyweight().getDifficulty()).append(enemy.getName()).append(", ");
+        }
+        return sb.toString();
+    }
+
+    public boolean containLiveEnemies(){
+        for (Enemy enemy : enemies) {
+            if (enemy.isAlive()) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public boolean isAlive(String enemyName){
+        if (getEnemyByName(enemyName) != null) {
+            return getEnemyByName(enemyName).isAlive();
+        }
+        return false;
+    }
+
+    public void isLocked(boolean locked) {
+        isLocked = locked;
     }
 
 }
-
-

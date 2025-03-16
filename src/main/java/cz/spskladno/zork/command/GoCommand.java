@@ -2,7 +2,7 @@ package cz.spskladno.zork.command;
 
 import cz.spskladno.zork.game.GameData;
 import cz.spskladno.zork.game.Room;
-import static cz.spskladno.zork.game.AnsiChars.*;
+
 import java.util.Arrays;
 
 public class GoCommand implements Command {
@@ -22,8 +22,8 @@ public class GoCommand implements Command {
         if (exitByName.isLocked()) {
             return "Vychod je zamcen. Najdi klíč";
         }
-        if (gameData.getCurrentRoom().getEnemy() != null) {
-            gameData.getCurrentRoom().getEnemy().attack(gameData.getHero());
+        if (gameData.getCurrentRoom().getEnemies() != null) {
+            gameData.getCurrentRoom().allEnemiesAttack(gameData.getHero());
             gameData.setCurrentRoom(exitByName);
             return "Utekl jsi!\n"+ gameData.getCurrentRoom().toString();
 

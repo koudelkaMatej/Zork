@@ -1,6 +1,7 @@
 package cz.spskladno.zork.command;
 
 import cz.spskladno.zork.game.GameData;
+
 public class ExploreRoomCommand implements Command{
     public String getName() {
         return "prozkoumej";

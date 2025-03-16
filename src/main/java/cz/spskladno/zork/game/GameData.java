@@ -1,7 +1,6 @@
 package cz.spskladno.zork.game;
 
-import cz.spskladno.zork.game.Heroes.Hero;
-import cz.spskladno.zork.game.Items.Item;
+import cz.spskladno.zork.game.heroes.Hero;
 
 import java.util.List;
 
@@ -18,5 +17,11 @@ public interface GameData {
 
     void init();
 
+    void reset();
+
     Hero getHero();
+
+    boolean hasGivenUp();
+
+    void setGivenUp(boolean b);
 }

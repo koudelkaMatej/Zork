@@ -16,10 +16,17 @@ public class DropCommand implements Command {
         String itemName = String.join(" ", Arrays.copyOfRange(arguments, 1, arguments.length));
         Item item = gameData.getHero().getInventory().getItemByName(itemName);
         if (item == null) {
-            return "Tento predmet hrdina nemá.";
+            item = gameData.getHero().getEquipment().getItemByName(itemName);
+            if (item == null) {
+                return "Tento předmět hrdina nemá v batohu ani na sobě.";
+            }
+            gameData.getHero().unEquipItem(item);
+            gameData.getCurrentRoom().addItem(item);
         }
-        gameData.getHero().removeItemFromInventory(item);
-        gameData.getCurrentRoom().addItem(item);
+        else{
+            gameData.getHero().removeFromInventory(item);
+            gameData.getCurrentRoom().addItem(item);
+        }
 
 
         return gameData.getCurrentRoom().toString();

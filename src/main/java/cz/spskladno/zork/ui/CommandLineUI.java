@@ -10,32 +10,48 @@ import java.util.Scanner;
 
 public class CommandLineUI {
     private static final Logger log = LoggerFactory.getLogger(CommandLineUI.class);
-    private static CommandLineUI INSTANCE = new CommandLineUI();
-    private final Game game = new GameImpl();
-    public CommandLineUI() {
+    private static CommandLineUI INSTANCE;
+    private Game game = new GameImpl();
+
+    private CommandLineUI() {
+        this.game = new GameImpl();
+    }
+    // Singleton
+    public static synchronized CommandLineUI getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new CommandLineUI();
+        }
+        return INSTANCE;
     }
 
     public void start() {
         log.info("Application started.");
+        String command = null;
         try (Scanner scanner = new Scanner(System.in)) {
-            System.out.printf(this.game.settingUpHero());
-            this.game.setName(scanner.nextLine());
-            System.out.println("\n\n");
+            System.out.printf(game.settingUpHeroNameText());
+            command = scanner.nextLine();
+            this.game.settingUpHeroName(command);
+            System.out.println(this.game.settingUpHeroClassText());
+            command = scanner.nextLine();
+            this.game.settingUpHeroClass(command);
+            System.out.println(this.game.getHeroJobText());
+            this.game.setHeroStartingStats();
             System.out.println(this.game.getWelcomeMessage());
             while (!this.game.isFinished()) {
                 System.out.print("> ");
                 System.out.println(this.game.processTextCommand(scanner.nextLine()));
+                if (this.game.isFinished()) {
+                    break;
+                }
             }
             if (!this.game.heroIsAlive()) {
                 System.out.println(this.game.deathEndMessage());
-            }
-            else {
+            } else if (this.game.hasGiveUp()) {
+                System.out.println(this.game.getGiveUpMessage());
+            } else {
                 System.out.println(this.game.getEndMessage());
             }
         }
     }
 
-    public static CommandLineUI getInstance() {
-        return INSTANCE;
-    }
 }
