@@ -29,6 +29,8 @@ public interface Room {
 
     Object getItem(String itemName);
 
+    void removeEnemy(String nameEnemy);
+
     void addItem(Item item);
 
     Enemy getEnemy();

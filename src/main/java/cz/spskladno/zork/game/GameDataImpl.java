@@ -67,7 +67,7 @@ public class GameDataImpl implements GameData {
         Item prilbaOsudu = new ItemBuilder(helma).name("Přilba osudu").armor(5).hp(2).build();
         Item malýLektvarZdraví = new ItemBuilder(lektvar).name("Malý lektvar zdraví").hp(10).build();
         Item velkýLektvarZdraví = new ItemBuilder(lektvar).name("Velký lektvar zdraví").hp(20).build();
-        gameItems.addAll(Arrays.asList(excalibur, mec, luk, brneni1, brneni2, kalhoty1, kalhoty2, prilba1, prilba2, klicBoss, mince, kniha, prilbaOsudu, malýLektvarZdraví, velkýLektvarZdraví));
+        gameItems.addAll(Arrays.asList(excalibur, mec, luk, brneni1, brneni2, kalhoty1, kalhoty2, prilba1, prilba2, mince, kniha, prilbaOsudu, malýLektvarZdraví, velkýLektvarZdraví));
 
 
         EnemyFlyweight goblin = new EnemyFlyweight("Goblin");

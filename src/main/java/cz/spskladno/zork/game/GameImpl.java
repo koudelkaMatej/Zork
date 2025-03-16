@@ -35,6 +35,8 @@ public class GameImpl implements Game {
         ExploreRoomCommand exploreRoom = new ExploreRoomCommand();
         PickUpCommand pickUp = new PickUpCommand();
         DropCommand drop = new DropCommand();
+        AttackCommand attack = new AttackCommand();
+        commands.put(attack.getName(), attack);
         commands.put(drop.getName(), drop);
         commands.put(pickUp.getName(), pickUp);
         commands.put(exploreRoom.getName(), exploreRoom);

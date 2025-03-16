@@ -133,6 +133,8 @@ public class RoomImpl implements Room {
     public Enemy getEnemy(){
         return enemies.get(0);
     }
+
+
     /**
      * Returns a room based on the entered room (exit) name
      */
@@ -189,6 +191,10 @@ public class RoomImpl implements Room {
         items.removeIf(item -> item.getItemFlyweight().getName().equals(itemName));
     }
 
+    public void removeEnemy(String enemyName) {
+        enemies.removeIf(enemy -> enemy.getName().equals(enemyName));
+    }
+
     public void addItem(Item item) {
         items.add(item);
     }
@@ -213,7 +219,7 @@ public class RoomImpl implements Room {
         if (getItemsName() != null && !getItemsName().isEmpty()) {
             sb.append("Ve tvém okolí se nachází: ").append(itemColor).append(getItemsName()).append(resetColor).append("\n");
         }
-        if (getEnemy().isAlive() && getEnemy() != null) {
+        if (getEnemies() != null || !getEnemies().isEmpty()) {
             sb.append("V místnosti se nachází nepřítel: ").append(enemyColor).append(getEnemy().getName()).append(resetColor).append("\n");
         }
 

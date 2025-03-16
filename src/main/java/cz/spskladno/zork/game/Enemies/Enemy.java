@@ -41,6 +41,18 @@ public class Enemy {
         loot = null;
     }
 
+    public int getDefense() {
+        return defense;
+    }
+
+    public int getCriticalChance() {
+        return criticalChance;
+    }
+
+    public int getExperience() {
+        return experience;
+    }
+
     public void attack(Hero hero){
         int attack = minAttack + (int) (Math.random() * (maxAttack - minAttack + 1));
         double criticalChanceRoll = Math.random();  // A random number between 0 and 1

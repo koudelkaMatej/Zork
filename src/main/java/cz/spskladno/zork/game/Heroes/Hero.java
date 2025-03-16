@@ -1,4 +1,5 @@
 package cz.spskladno.zork.game.Heroes;
+import cz.spskladno.zork.game.Enemies.Enemy;
 import cz.spskladno.zork.game.Items.Inventory;
 import cz.spskladno.zork.game.Items.Item;
 import cz.spskladno.zork.game.Room;
@@ -36,8 +37,8 @@ public class Hero implements Heroes {
         this.name = "Hero";
         this.maxHP = 20;
         this.HP = 20;
-        this.minAttack = 1;
-        this.maxAttack = 5;
+        this.minAttack = 20;
+        this.maxAttack = 50;
         this.defense = 1;
         this.level = 1;
         this.experience = 0;
@@ -45,8 +46,6 @@ public class Hero implements Heroes {
         this.criticalChance = 0;
         this.strength = 20;
         this.inventory.clear();
-
-
     }
 
     public int getCriticalChance() {
@@ -153,17 +152,33 @@ public class Hero implements Heroes {
             HP = maxHP;
         }
     }
-//
-//    @Override
-//    public void attack(Enemy enemy) {
-//
-//    }
-//
-//    @Override
-//    public void defend(Enemy enemy) {
-//
-//    }
-//
+
+    @Override
+    public void attack(Enemy enemy) {
+        int damage = (int) (Math.random() * (maxAttack - minAttack + 1) + minAttack);
+        if (Math.random() * 100 < criticalChance) {
+            damage *= 2;
+            System.out.println("Zasáhl jsi kriticky!");
+        }
+        damage -= enemy.getDefense();
+        if (damage < 0) {
+            damage = 1;
+        }
+        enemy.setHp(enemy.getHp() - damage);
+        System.out.println("Zasáhl jsi nepřítele za " + enemyColor + damage + resetColor + " bodů zdraví.");
+        System.out.println("Nepřítel má nyní " + enemyColor + enemy.getHp() + resetColor + " bodů zdraví.");
+        if (enemy.getHp() <= 0) {
+            enemy.setHp(0);
+            enemy.setAlive(false);
+            System.out.println("Porazil jsi nepřítele " + enemy.getName());
+            addExperience(enemy.getExperience());
+            if (enemy.getLoot() != null) {
+                System.out.println("Získal jsi " + itemColor + enemy.getLoot().getItemFlyweight().getItemType() + enemy.getLoot().getItemFlyweight().getName() + resetColor);
+                addToInventory(enemy.getLoot());
+            }
+        }
+    }
+
     @Override
     public void heal(Item item) {
         if (inventory.getItems().containsValue(item)){
@@ -183,6 +198,10 @@ public class Hero implements Heroes {
 
     }
 
+    public void selfBurn(){
+        setHP(getHP()-2);
+        System.out.println("Promáchl jsi a zranil se za " + enemyColor + "2 " + resetColor + "body zdraví. Jsi fakt super hrdina");
+    }
 
     public boolean setName(String name) {
         if (name.length() > 3) {
